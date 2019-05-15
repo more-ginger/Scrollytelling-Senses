@@ -68,7 +68,8 @@ a:hover {
 
 
   #outro {
-    height: 640px;
+    background-color: grey;
+    height: 300px;
   }
 
   article {
