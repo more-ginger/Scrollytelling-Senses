@@ -22,26 +22,30 @@ function handleResize() {
   scroller.resize();
 }
 
-// scrollama event handlers
 
+
+
+
+
+
+
+
+
+// scrollama event handlers
 ///handleStepEnter: what should happen if we enter a Step?
 function handleStepEnter(response) {
-  // response = { element, direction, index }
-
 
   // add color to current step only
-  step.classed("is-active", function (d, i) {
-    return i === response.index;
-  })
+  step.filter(function(d,i){return i === response.index}).classed("is-active", true)
       }
 
 
 ///handleStepExit: what should happen if we exit a Step?
 function handleStepExit(response) {
-  // response = { element, direction, index }
-  console.log("exit", response);
+
   // remove color from current step
-//	response.element.classList.remove("is-active");
+step.filter(function(d,i){return i === response.index}).classed("is-active", false)
+
 }
 
 
@@ -53,6 +57,14 @@ function handleStepProgress(response) {
 
 
 }
+
+
+
+
+
+
+
+
 
 
 
