@@ -1,53 +1,52 @@
-// using d3 for convenience
-var main = d3.select('main')
-var scrolly = main.select('#scrolly');
+// defining variables just for convenience of being able to stuff without having to select everything anew each time
+var main = d3.select("main")
+var scrolly = main.select("#scrolly");
 var figure = d3.select("figure")
 var svg = d3.select("#visualization")
-var article = scrolly.select('article');
-var step = article.selectAll('.step');
+var article = scrolly.select("article");
+var step = article.selectAll(".step");
 
 // initialize the scrollama
 var scroller = scrollama();
 
-// generic window resize listener event
+// generic window resize listener event: we need this to resize our content when we resize our browser window
 function handleResize() {
-  // 1. update height of step elements
-
   var figureHeight = window.innerHeight - 100
   var figureMarginTop = (window.innerHeight - figureHeight) -50
 
   figure
-    .style('height', figureHeight + 'px')
-    .style('top', figureMarginTop + 'px');
+    .style("height", figureHeight + "px")
+    .style("top", figureMarginTop + "px");
 
-
-  // 3. tell scrollama to update new element dimensions
+  // tell scrollama to update new element dimensions
   scroller.resize();
 }
 
 // scrollama event handlers
+
+///handleStepEnter: what should happen if we enter a Step?
 function handleStepEnter(response) {
   // response = { element, direction, index }
 
 
   // add color to current step only
-  step.classed('is-active', function (d, i) {
+  step.classed("is-active", function (d, i) {
     return i === response.index;
   })
-
-
       }
 
 
-
+///handleStepExit: what should happen if we exit a Step?
 function handleStepExit(response) {
   // response = { element, direction, index }
-  console.log('exit', response);
+  console.log("exit", response);
   // remove color from current step
-//	response.element.classList.remove('is-active');
+//	response.element.classList.remove("is-active");
 }
 
 
+
+///handleStepExit: what should happen during a step between Enter and Exit?
 function handleStepProgress(response) {
   console.log(response)
   console.log(response.progress)
@@ -60,11 +59,13 @@ function handleStepProgress(response) {
 
 
 function setupStickyfill() {
-  d3.selectAll('.sticky').each(function () {
+  d3.selectAll(".sticky").each(function () {
     Stickyfill.add(this);
   });
 }
 
+
+///general setup: interesting for you here will be mainly offset and debug
 function init() {
   setupStickyfill();
 
@@ -75,7 +76,7 @@ function init() {
   // 		this will also initialize trigger observations
   // 3. bind scrollama event handlers (this can be chained like below)
   scroller.setup({
-    step: '#scrolly article .step',
+    step: "#scrolly article .step",
     offset: 0.2,
     progress: true,
     debug: true,
@@ -87,7 +88,7 @@ function init() {
 
 
   // setup resize event
-  window.addEventListener('resize', handleResize);
+  window.addEventListener("resize", handleResize);
 }
 
 // kick things off
