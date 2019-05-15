@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+	<meta charset="UTF-8">
+	<title>D3 Workshop</title>
+
+
+	<style>
+
+	</style>
+	<script src="http://d3js.org/d3.v4.min.js"></script>
+
+</head>
+<body>
+
+<script type="text/javascript">
+
+  var daten= [3, 4, 8, 2, 9]
+
+  var p = d3.select("body").selectAll("p")
+    .data(daten) //Bindet die Daten an die Auswahl
+    .enter()  //.enter() selektiert alle noch nicht existierenden Platzhalterelemente "p", die noch für die Daten erstellt werden müssen
+    .append("p") //fügt p hinzu
+    .style("color", "red")
+    .style("margin", 100+"px")
+    .text(function(d){return d + " Kartoffeln"}); // function die nur den Datenwert (d) wiedergibt und das Wort Kartoffeln hinzufügt
+
+
+
+
+</script>
+
+
+</body>
+</html>

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+	<meta charset="UTF-8">
+	<title>D3 Workshop</title>
+
+
+	<style>
+
+	</style>
+	<script src="http://d3js.org/d3.v4.min.js"></script>
+
+</head>
+<body>
+
+<script type="text/javascript">
+
+d3.select("body").append("h1")   //body auswählen und h1 am Ende (aber innerhalb) der Auswal einfügen. Also hier vor </body>
+		.attr("class", "kartoffelsammlung") //class vergeben
+		.style("color", "black") //Farbe festlegen
+		.text("Kartoffelsammlung");  //Text-Inhalt für h1 einfügen
+
+d3.select("body").append("p")  //body auswählen und p am Ende einfügen
+    .style("color", "red")
+    .text("Kartoffel");
+
+
+
+
+</script>
+
+
+</body>
+</html>

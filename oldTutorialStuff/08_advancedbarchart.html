@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>bar-chart</title>
+  <style>
+
+
+    .axis--x path {
+      display: none;
+    }
+
+    .axis text {
+      fill: black;
+    }
+
+  </style>
+
+  <script src="http://d3js.org/d3.v4.min.js"></script>
+
+</head>
+<body>
+
+
+<script type="text/javascript">
+
+
+  var margin = {top: 20, right: 20, bottom: 30, left: 40};
+  var width = 960 - margin.left - margin.right;
+  var height = 500 - margin.top - margin.bottom;
+
+  var svg = d3.select("body").append("svg") //svg mit den festgelegten Variablen erstellen
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom);
+
+  var g = svg.append("g") //Gruppe innerhalb des SVGs erstellen um Margin auf alle Elemente gleichzeitig anzuwenden
+      .attr("transform", "translate(" + margin.left + "," + margin.top + ")") // um margin verschieben
+
+  d3.csv("obstdaten.csv", function(d) {    // Daten laden: d3.csv(url, row conversion function, callback)
+    d.anzahl = +d.anzahl;                 // row conversion: das + wandelt Strings in Zahlen um
+    return d;
+  }, function(error, obstdaten) {       // die Daten aus Obstdatensatz sind nur in dem Bereich ab "{" bis zum "});" am Ende des Dokumentes nutzbar
+    if (error) throw error;
+
+
+    var x = d3.scaleBand() //d3.scaleBand für kategorische Daten. Daten werden wie gleichgroße Bänder auf der Achse verteilt
+      .rangeRound([0, width])   //rangeRound gibt gerundete Werte wieder zwischen 0 und width
+      .padding(0.1) //Abstand zwischen Balken
+      .domain(obstdaten.map(function(d) { return d.obstsorte; })); //Array mit allen Obstsorten wird als Domain ausgegeben
+
+    var y = d3.scaleLinear()
+      .rangeRound([height, 0])
+      .domain([0, d3.max(obstdaten, function(d) { return d.anzahl; })]);
+
+
+    //x-Achse unten einfügen
+    g.append("g")
+        .attr("class", "axis axis--x")
+        .attr("transform", "translate(0," + height + ")") //positioniert die x-Achse
+        .call(d3.axisBottom(x)); //fügt die x-Achse ein und nutzt die generierten Werte von var x
+
+    g.append("g")
+        .attr("class", "axis axis--y")
+        .call(d3.axisLeft(y)) //fügt die y-Achse ein und nutzt die generierten Werte von var y
+        .append("text") //fügt ein Text-Label hinzu
+        .attr("x", 0)
+        .attr("y", 0)
+        .attr("dy", -2)
+        .attr("text-anchor", "end")
+        .text("Anzahl");
+
+  //Balken mit Daten einfügen
+    g.selectAll(".bar")
+      .data(obstdaten)
+      .enter()
+      .append("rect")
+        .attr("class", "bar")
+        .attr("x", function(d) { return x(d.obstsorte); }) //Position abhängig von var x
+        .attr("y", function(d) { return y(d.anzahl); })  //Position abhängig von var y
+        .attr("width", x.bandwidth())  //Balkenbreite -> .bandwidth gibt die errechnete Größe der Bänder von var x wieder
+        .attr("height", function(d) { return height - y(d.anzahl); })
+        .style("fill", function(d){return d.farbe}); //Farbe anhand der Farb-Datenspalte in der csv-Datei einfügen
+
+  //Interaktion
+    g.selectAll(".bar")
+      .on("mouseover", hoverAnfang)   //bei Mouseover führe Funktion hoverAnfang aus
+      .on("mouseout", hoverEnde); //bei Mouseout führe Funktion hoverEnde aus
+
+  //Mouseover Funktion
+
+    function hoverAnfang(D, I){
+      g.selectAll(".bar")
+      .filter(function(d, i){return i == I })  // Balken mit dem gleichen Iterationswert auswählen, wie der Balken auf dem die Maus gerade ist
+      .transition()  // Übergang animieren
+      .duration(1000) // Dauer der Animation, 1000 ms
+      .style("fill", "black");
+
+      g.append("text")  //fügt den Datenwert als Textelement/Label dem ausgewählten Balken hinzu
+        .attr("class", "label")
+        .attr("x", +d3.select(this).attr("x")+(x.bandwidth())/2)  // bandwidth() -> Methode um die Bandbreite von d3.scaleBand zu erhalten
+        .attr("y", +d3.select(this).attr("y")) //+ -> turn string into number
+        .attr("dy", -2)
+        .attr("text-anchor", "middle")
+        .style("fill", "black")
+        .text(D.anzahl);
+    }
+
+  //Mouseout Funktion
+
+    function hoverEnde(D, I){
+      g.selectAll(".bar")
+      .filter(function(d, i){return i == I })
+      .transition()
+      .style("fill", function(d){return d.farbe});
+
+      g.selectAll(".label")
+      .remove();  // entferne das Label wieder
+    }
+
+  });
+
+</script>
+</body>
+</html>
