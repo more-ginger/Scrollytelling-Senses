@@ -1,10 +1,10 @@
 // defining variables just for convenience of being able to stuff without having to select everything anew each time
 var main = d3.select("main")
-var scrolly = main.select("#scrolly")
+var scrolly = main.select("#scrolly");
 var figure = d3.select("figure")
 var svg = d3.select("#visualization")
-var article = scrolly.select("article")
-var step = article.selectAll(".step")
+var article = scrolly.select("article");
+var step = article.selectAll(".step");
 
 // initialize the scrollama
 var scroller = scrollama();
@@ -16,13 +16,17 @@ function handleResize() {
 
   figure
     .style("height", figureHeight + "px")
-    .style("top", figureMarginTop + "px")
+    .style("top", figureMarginTop + "px");
 
   // tell scrollama to update new element dimensions
   scroller.resize();
 }
 
 
+
+var colorScale = d3.scaleOrdinal()
+  .domain([0,1,2,3])
+  .range(["#acebf6","#f9cdc2","#9a78aa","#dae48f"])
 
 
 
@@ -42,8 +46,10 @@ function handleResize() {
 
 ///handleStepEnter: what should happen if we enter a Step?
 function handleStepEnter(response) {
-  console.log(response.element)
-  console.log(response.index + " " + response.direction)
+
+
+svg.style("background-color", colorScale(response.index))
+
 
   // add color to current step only
   step

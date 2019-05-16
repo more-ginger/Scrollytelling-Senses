@@ -68,7 +68,7 @@ article {
 }
 
 figure {
-  background-color: grey;
+  background-color: rgb(217, 217, 217);
   position: -webkit-sticky;
   position: sticky;
   width: 100%;

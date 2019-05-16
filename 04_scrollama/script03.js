@@ -1,10 +1,10 @@
 // defining variables just for convenience of being able to stuff without having to select everything anew each time
 var main = d3.select("main")
-var scrolly = main.select("#scrolly")
+var scrolly = main.select("#scrolly");
 var figure = d3.select("figure")
 var svg = d3.select("#visualization")
-var article = scrolly.select("article")
-var step = article.selectAll(".step")
+var article = scrolly.select("article");
+var step = article.selectAll(".step");
 
 // initialize the scrollama
 var scroller = scrollama();
@@ -16,13 +16,43 @@ function handleResize() {
 
   figure
     .style("height", figureHeight + "px")
-    .style("top", figureMarginTop + "px")
+    .style("top", figureMarginTop + "px");
 
   // tell scrollama to update new element dimensions
   scroller.resize();
 }
 
 
+
+var colorScale = d3.scaleOrdinal()
+  .domain([0,1,2,3])
+  .range(["#acebf6","#f9cdc2","#9a78aa","#dae48f"])
+
+var progressBarColor = d3.scaleLinear()
+  .domain([0,1])
+  .range(["grey", "blue"])
+
+
+///add a new variable progressStatus that appends a svg-text-element to our svg and position it somewhere in the visualization block
+var progressStatus = svg.append("text")
+  .attr("x", "50px") //x-position
+  .attr("y", "50px") //y-position
+  .text("0")    //what does the text say?
+
+//add a progressBar
+var progressGoalBar = svg.append("rect")
+  .attr("x", "50px")
+  .attr("y", "50px")
+  .attr("height", "20px")
+  .attr("width", "800px")
+  .style("fill", "white")
+
+var progressBar = svg.append("rect")
+  .attr("x", "50px")
+  .attr("y", "50px")
+  .attr("height", "20px")
+  .attr("width", "0px")
+  .style("fill", "black")
 
 
 
@@ -42,8 +72,11 @@ function handleResize() {
 
 ///handleStepEnter: what should happen if we enter a Step?
 function handleStepEnter(response) {
-  console.log(response.element)
-  console.log(response.index + " " + response.direction)
+
+
+svg.style("background-color", colorScale(response.index))
+
+
 
   // add color to current step only
   step
@@ -56,7 +89,6 @@ function handleStepEnter(response) {
 
 ///handleStepExit: what should happen if we exit a Step?
 function handleStepExit(response) {
-  console.log(response.index + " " + response.direction)
 
   // remove color from current step
   step
@@ -71,8 +103,12 @@ function handleStepExit(response) {
 
 ///handleStepExit: what should happen during a step between Enter and Exit?
 function handleStepProgress(response) {
-  console.log(response.progress)
+  progressStatus
+    .text(function(d,i){return response.index + response.progress})
 
+  progressBar
+    .attr("width", response.progress * 800)
+    .style("fill", progressBarColor(response.progress))
 
 }
 
