@@ -115,3 +115,12 @@ figure {
   padding: 1rem;
   font-size: 1.5rem;
 }
+
+#clickhier{
+  cursor: pointer;
+  background-color: orange;
+  color: white;
+  font-style: italic;
+  font-weight: bold;
+  padding: 1px;
+}

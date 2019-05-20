@@ -91,6 +91,15 @@ houseSVG.selectAll("path")//.style("fill", "red")
 
 
 
+  d3.select("#clickhier")
+    .on("click", function(d,i){
+
+      houseSVG.select(".st0")
+        .transition()
+        .duration("800")
+        .style("fill", "orange")
+
+    })
 
 
 
