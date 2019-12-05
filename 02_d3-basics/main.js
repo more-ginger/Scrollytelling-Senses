@@ -1,5 +1,5 @@
 //Takes a selector and return a selection representing all the elements that match the selector, here you are selecting the svg circles in the HTML file!
-/var circle = d3.selectAll("circle");
+var circle = d3.selectAll("circle");
 
 //2.Selecting Elements means you can also edit them
 circle.style("fill","steelblue");
